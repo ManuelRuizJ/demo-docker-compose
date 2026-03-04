@@ -1,0 +1,29 @@
+services:
+  api:
+    build: ./app
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://postgres:password@db:5432/db_demo
+      REDIS_HOST: redis
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_demo
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    volumes:
+      - redis_data:/data
+
+volumes:
+  db_data:
+  redis_data:
